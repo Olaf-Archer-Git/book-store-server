@@ -58,7 +58,14 @@ const getSingleUser = asyncHandler(async (req, res) => {
 const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
-    const update = await User.findByIdAndUpdate(id);
+    //needs another id not from params
+    const update = await User.findByIdAndUpdate(id, {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      mobile: req.body.mobile,
+      password: req.body.password,
+    });
     res.json(update);
   } catch (error) {
     throw new Error(error, "updateUser");

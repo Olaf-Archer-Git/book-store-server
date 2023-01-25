@@ -2,7 +2,7 @@ const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const { generateToken } = require("../config/jwToken");
 
-//create new user
+//create new user (register)
 const createUser = asyncHandler(async (req, res) => {
   const email = req.body.email;
   const findUser = await User.findOne({ email });
@@ -34,7 +34,6 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 });
 
 //get all users
-
 const getAllUsers = asyncHandler(async (req, res) => {
   try {
     const getUser = await User.find();
@@ -55,8 +54,18 @@ const getSingleUser = asyncHandler(async (req, res) => {
   }
 });
 
-//delete user
+//update user
+const updateUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const update = await User.findByIdAndUpdate(id);
+    res.json(update);
+  } catch (error) {
+    throw new Error(error, "updateUser");
+  }
+});
 
+//delete user
 const deleteUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
@@ -73,4 +82,5 @@ module.exports = {
   getAllUsers,
   getSingleUser,
   deleteUser,
+  updateUser,
 };

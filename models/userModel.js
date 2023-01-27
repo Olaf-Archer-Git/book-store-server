@@ -34,8 +34,9 @@ const userSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    address: [{ type: ObjectId, ref: "Address" }],
-    favorite: [{ type: ObjectId, ref: "Product" }],
+
+    address: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
+    favorite: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
   },
   { timestamps: true }
 );

@@ -4,8 +4,10 @@ const {
   loginUserCtrl,
   getAllUsers,
   getSingleUser,
-  deleteUser,
   updateUser,
+  blockUser,
+  unblockUser,
+  deleteUser,
 } = require("../controllers/userCtrl");
 const router = express.Router();
 const {
@@ -17,7 +19,10 @@ router.post("/register", createUser);
 router.post("/login", loginUserCtrl);
 router.get("/all-users", getAllUsers);
 router.get("/:id", authMiddleware, adminMiddleware, getSingleUser);
-router.put("/:id", updateUser);
+router.put("/edit-user", authMiddleware, updateUser);
+router.put("/block-user/:id", authMiddleware, adminMiddleware, blockUser);
+router.put("/unblock-user/:id", authMiddleware, adminMiddleware, unblockUser);
+
 router.delete("/:id", deleteUser);
 
 module.exports = router;

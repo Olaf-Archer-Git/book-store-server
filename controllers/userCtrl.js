@@ -5,7 +5,6 @@ const validateMongoDB = require("../utils/validateMongoDB");
 const generateRefreshToken = require("../config/refreshTokken");
 const jwt = require("jsonwebtoken");
 
-
 //create new user (register)
 const createUser = asyncHandler(async (req, res) => {
   const email = req.body.email;
@@ -34,7 +33,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
     );
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      maxAge: 60*60*1000,
+      maxAge: 60 * 60 * 1000,
     });
     res.json({
       id: findUser?.id,
@@ -63,24 +62,27 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
     if (error || user.id !== decoded._id) {
       throw new Error("jwt verify");
     }
-    const accessToken =  generateToken(user?.id);
+    const accessToken = generateToken(user?.id);
     res.json({ accessToken });
   });
 });
 
 //logout user
-const logOutUser = asyncHandler(async(req, res) => {
+const logOutUser = asyncHandler(async (req, res) => {
   const cookie = req.cookies;
-  if (!cookie?.refreshToken)
-    throw new Error("logoutuser, check token auth");
+  if (!cookie?.refreshToken) throw new Error("logoutuser, check token auth");
   const refreshToken = cookie?.refreshToken;
   const user = await User.findOne({
     refreshToken,
   });
-
-})
-
-
+  if (!user) {
+    res.clearCookie("refreshToken", { httpOnly: true, secure: true });
+    return res.sendStatus(204);
+  }
+  await User.findOneAndUpdate(refreshToken, { refreshToken: "" });
+  res.clearCookie("refreshToken", { httpOnly: true, secure: true });
+  res.sendStatus(204);
+});
 
 //get all users
 const getAllUsers = asyncHandler(async (req, res) => {
@@ -181,5 +183,5 @@ module.exports = {
   blockUser,
   unblockUser,
   handleRefreshToken,
-  logOutUser
+  logOutUser,
 };

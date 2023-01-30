@@ -21,11 +21,12 @@ router.post("/register", createUser);
 router.post("/login", loginUserCtrl);
 router.get("/all-users", getAllUsers);
 router.get("/refresh", handleRefreshToken);
+router.get("/logout", logOutUser);
 router.get("/:id", authMiddleware, adminMiddleware, getSingleUser);
 router.put("/edit-user", authMiddleware, updateUser);
 router.put("/block-user/:id", authMiddleware, adminMiddleware, blockUser);
 router.put("/unblock-user/:id", authMiddleware, adminMiddleware, unblockUser);
-router.get("/logout", logOutUser);
+
 
 
 router.delete("/:id", deleteUser);

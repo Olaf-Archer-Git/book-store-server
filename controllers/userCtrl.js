@@ -3,6 +3,8 @@ const asyncHandler = require("express-async-handler");
 const { generateToken } = require("../config/jwToken");
 const validateMongoDB = require("../utils/validateMongoDB");
 const generateRefreshToken = require("../config/refreshTokken");
+const jwt = require("jsonwebtoken");
+
 
 //create new user (register)
 const createUser = asyncHandler(async (req, res) => {
@@ -32,15 +34,15 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
     );
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      maxAge: 2592000,
+      maxAge: 60*60*1000,
     });
     res.json({
-      _id: findUser?._id,
+      id: findUser?.id,
       firstName: findUser?.firstName,
       lastName: findUser?.lastName,
       email: findUser?.email,
       mobile: findUser?.mobile,
-      token: generateToken(findUser?._id),
+      token: generateToken(findUser?.id),
     });
   } else {
     throw new Error("error - login user ctrl");
@@ -50,10 +52,35 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 //handle refresh token
 const handleRefreshToken = asyncHandler(async (req, res) => {
   const cookie = req.cookies;
-  if (!cookie?.refreshToken) throw new Error("No handle refresh token");
+  if (!cookie?.refreshToken)
+    throw new Error("handleRfreshToken, check token auth");
   const refreshToken = cookie?.refreshToken;
-  console.log(refreshToken);
+  const user = await User.findOne({
+    refreshToken,
+  });
+  if (!user) throw new Error("handleRefreshToken user");
+  jwt.verify(refreshToken, process.env.JWT, (error, decoded) => {
+    if (error || user.id !== decoded._id) {
+      throw new Error("jwt verify");
+    }
+    const accessToken =  generateToken(user?.id);
+    res.json({ accessToken });
+  });
 });
+
+//logout user
+const logOutUser = asyncHandler(async(req, res) => {
+  const cookie = req.cookies;
+  if (!cookie?.refreshToken)
+    throw new Error("logoutuser, check token auth");
+  const refreshToken = cookie?.refreshToken;
+  const user = await User.findOne({
+    refreshToken,
+  });
+
+})
+
+
 
 //get all users
 const getAllUsers = asyncHandler(async (req, res) => {
@@ -154,4 +181,5 @@ module.exports = {
   blockUser,
   unblockUser,
   handleRefreshToken,
+  logOutUser
 };

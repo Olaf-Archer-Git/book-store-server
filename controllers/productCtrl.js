@@ -10,4 +10,12 @@ const createProduct = asyncHandler(async (req, res) => {
   }
 });
 
+const getProduct = asyncHandler(async (req, res) => {
+  try {
+    const 
+  } catch (error) {
+    throw new Error(error, "getProduct, productCtrl");
+  }
+});
+
 module.exports = { createProduct };

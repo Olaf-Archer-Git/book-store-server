@@ -6,10 +6,12 @@ const dotenv = require("dotenv").config();
 const authRouter = require("./routes/authRoute");
 const productRouter = require("./routes/productRoute");
 const cookieParser = require("cookie-parser");
+const morgan = require("morgan");
 const app = express();
 
 const PORT = process.env.PORT || 3088;
 
+app.use(morgan("dev"))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());

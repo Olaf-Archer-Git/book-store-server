@@ -8,6 +8,11 @@ var productSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    author: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     slug: {
       type: String,
       required: true,
@@ -28,12 +33,10 @@ var productSchema = new mongoose.Schema(
     },
     quantity: {
       type: Number,
-      
     },
     sold: {
       type: Number,
       default: 0,
-      
     },
     images: {
       type: Array,

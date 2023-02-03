@@ -18,6 +18,7 @@ const createProduct = asyncHandler(async (req, res) => {
 //get all products
 const getAllProducts = asyncHandler(async (req, res) => {
   try {
+    //filter products
     const queryObj = { ...req.query };
     const excludefields = ["sort", "page", "limit", "fields"];
     excludefields.forEach((item) => delete queryObj[item]);
@@ -27,7 +28,28 @@ const getAllProducts = asyncHandler(async (req, res) => {
       /\b(gte|gt|lte|lt)\b/g,
       (match) => `$${match}`
     );
-    const query = Product.find(JSON.parse(queryString));
+    //////////////////////
+
+    //sorting products
+    let query = Product.find(JSON.parse(queryString));
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(",").join(" ");
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort("-createdAt");
+    }
+
+    ////////////////////////
+
+    //limit the fields
+    if(req.query.fields){
+      const fields = req.query.fields.split(",").join(" ");
+      query = query.select(fields);
+    } else {
+      query = query.select("__v");
+    }
+
+
     const product = await query;
     res.json(product);
   } catch (error) {

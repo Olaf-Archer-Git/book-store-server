@@ -176,7 +176,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 //update password
 const updatePassword = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const password = req.body;
+  const password = req.body.password;
   validateMongoDB(_id);
   const user = await User.findById(_id);
   if (password) {

@@ -19,6 +19,7 @@ const {
 } = require("../middlewares/authMiddleware");
 
 router.post("/register", createUser);
+router.put("/update-password", authMiddleware, updatePassword);
 router.post("/login", loginUserCtrl);
 router.get("/all-users", getAllUsers);
 router.get("/refresh", handleRefreshToken);
@@ -27,7 +28,6 @@ router.get("/:id", authMiddleware, adminMiddleware, getSingleUser);
 router.put("/edit-user", authMiddleware, updateUser);
 router.put("/block-user/:id", authMiddleware, adminMiddleware, blockUser);
 router.put("/unblock-user/:id", authMiddleware, adminMiddleware, unblockUser);
-router.put("/update-password", authMiddleware, updatePassword);
 
 router.delete("/:id", deleteUser);
 

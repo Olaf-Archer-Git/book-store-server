@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-var crypto = require("crypto");
+const crypto = require("crypto");
 
 // Declare the Schema of the Mongo model
 const userSchema = new mongoose.Schema(
@@ -45,15 +45,19 @@ const userSchema = new mongoose.Schema(
     refreshToken: {
       type: String,
     },
-    passwordChanged: Date,
-    passwordResetToken: String,
+    passwordChangedAt: Date,
+    passwordResetToken: {
+      type: String,
+    },
     passwordResetExpires: Date,
   },
   { timestamps: true }
 );
 
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) next();
+  if (!this.isModified("password")) {
+    next();
+  }
   const salt = bcrypt.genSaltSync(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
@@ -63,7 +67,7 @@ userSchema.methods.isPasswordMatched = async function (enteredPassword) {
 };
 
 userSchema.methods.createPasswordResetToken = async function () {
-  const resetToken = crypto.randomBytes(32).toString("hex");
+  const resetToken = crypto.randomBytes(32).toString(32);
   this.passwordResetToken = crypto
     .createHash("sha256")
     .update(resetToken)

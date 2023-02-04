@@ -11,7 +11,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3088;
 
-app.use(morgan("dev"))
+app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());

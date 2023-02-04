@@ -4,6 +4,7 @@ const { generateToken } = require("../config/jwToken");
 const validateMongoDB = require("../utils/validateMongoDB");
 const generateRefreshToken = require("../config/refreshTokken");
 const jwt = require("jsonwebtoken");
+const sendEmail = require("./emailCtrl");
 
 //create new user (register)
 const createUser = asyncHandler(async (req, res) => {
@@ -192,13 +193,24 @@ const forgotPasswordToken = async (req, res) => {
   const { email } = req.body;
 
   const user = await User.findOne({ email });
+
   if (!user) throw new Error("forgoPasswordToken");
+
   try {
     const token = await user.createPasswordResetToken();
     await user.save();
     const resetURL = `reset your password <a href="http://localhost:3003/api/user/update-password/${token}">click here</a>`;
+
+    const data = {
+      to: email,
+      subject: "Forgot Password Link",
+      text: "Howdy User",
+      html: resetURL,
+    };
+    sendEmail(data);
+    res.json(token);
   } catch (error) {
-    throw new Error(error, "forgoPasswordToken");
+    throw new Error(error);
   }
 };
 

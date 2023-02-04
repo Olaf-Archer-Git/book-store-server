@@ -22,8 +22,8 @@ const meiler = require("../controllers/emailCtrl");
 
 /////////////////
 router.post("/register", createUser);
-router.post("/login", loginUserCtrl);
 router.post("/forgot-password", forgotPasswordToken);
+router.post("/login", loginUserCtrl);
 router.get("/all-users", getAllUsers);
 router.get("/refresh", handleRefreshToken);
 router.get("/logout", logOutUser);
@@ -32,9 +32,7 @@ router.put("/edit-user", authMiddleware, updateUser);
 router.put("/block-user/:id", authMiddleware, adminMiddleware, blockUser);
 router.put("/unblock-user/:id", authMiddleware, adminMiddleware, unblockUser);
 router.put("/update-password", authMiddleware, updatePassword);
-/////////////
-router.post("/mailer", meiler);
-////////////
+
 router.delete("/:id", deleteUser);
 
 module.exports = router;

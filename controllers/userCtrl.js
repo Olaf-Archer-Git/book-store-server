@@ -189,18 +189,17 @@ const updatePassword = asyncHandler(async (req, res) => {
   }
 });
 
-const forgotPasswordToken = async (req, res) => {
+const forgotPasswordToken = asyncHandler(async (req, res) => {
   const { email } = req.body;
-
   const user = await User.findOne({ email });
 
-  if (!user) throw new Error("forgoPasswordToken");
+  if (!user) throw new Error("User Not Found ,forgoPasswordToken");
 
   try {
-    const token = await user.createPasswordResetToken();
+    const token = user.refreshToken;
+
     await user.save();
     const resetURL = `reset your password <a href="http://localhost:3003/api/user/update-password/${token}">click here</a>`;
-
     const data = {
       to: email,
       subject: "Forgot Password Link",
@@ -212,7 +211,7 @@ const forgotPasswordToken = async (req, res) => {
   } catch (error) {
     throw new Error(error);
   }
-};
+});
 
 module.exports = {
   createUser,

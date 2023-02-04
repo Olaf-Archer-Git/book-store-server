@@ -11,7 +11,7 @@ const {
   handleRefreshToken,
   logOutUser,
   updatePassword,
-  forgoPasswordToken,
+  forgotPasswordToken,
 } = require("../controllers/userCtrl");
 const router = express.Router();
 const {
@@ -21,7 +21,7 @@ const {
 
 router.post("/register", createUser);
 router.post("/login", loginUserCtrl);
-router.post("/forgot-password".forgoPasswordToken);
+router.post("/forgot-password", forgotPasswordToken);
 router.get("/all-users", getAllUsers);
 router.get("/refresh", handleRefreshToken);
 router.get("/logout", logOutUser);

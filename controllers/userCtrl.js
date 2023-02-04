@@ -188,8 +188,9 @@ const updatePassword = asyncHandler(async (req, res) => {
   }
 });
 
-const forgoPasswordToken = async (req, res) => {
+const forgotPasswordToken = async (req, res) => {
   const { email } = req.body;
+
   const user = await User.findOne({ email });
   if (!user) throw new Error("forgoPasswordToken");
   try {
@@ -213,5 +214,5 @@ module.exports = {
   handleRefreshToken,
   logOutUser,
   updatePassword,
-  forgoPasswordToken,
+  forgotPasswordToken,
 };

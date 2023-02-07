@@ -46,9 +46,7 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     passwordChangedAt: Date,
-    passwordResetToken: {
-      type: String,
-    },
+    passwordResetToken: String,
     passwordResetExpires: Date,
   },
   { timestamps: true }
@@ -66,7 +64,7 @@ userSchema.methods.isPasswordMatched = async function (enteredPassword) {
 };
 
 userSchema.methods.createPasswordResetToken = async function () {
-  const resetToken = crypto.randomBytes(32).toString(32);
+  const resetToken = crypto.randomBytes(32).toString("hex");
   this.passwordResetToken = crypto
     .createHash("sha256")
     .update(resetToken)

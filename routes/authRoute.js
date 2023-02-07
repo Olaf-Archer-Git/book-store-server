@@ -12,13 +12,13 @@ const {
   logOutUser,
   updatePassword,
   forgotPasswordToken,
+  resetPassword,
 } = require("../controllers/userCtrl");
 const router = express.Router();
 const {
   authMiddleware,
   adminMiddleware,
 } = require("../middlewares/authMiddleware");
-const meiler = require("../controllers/emailCtrl");
 
 /////////////////
 router.post("/register", createUser);
@@ -32,6 +32,7 @@ router.put("/edit-user", authMiddleware, updateUser);
 router.put("/block-user/:id", authMiddleware, adminMiddleware, blockUser);
 router.put("/unblock-user/:id", authMiddleware, adminMiddleware, unblockUser);
 router.put("/update-password", authMiddleware, updatePassword);
+router.put("/reset-password/:token", resetPassword);
 
 router.delete("/:id", deleteUser);
 

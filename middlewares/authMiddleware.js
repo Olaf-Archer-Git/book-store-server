@@ -18,13 +18,13 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
       throw new Error("Please Login Again");
     }
   } else {
+    
     throw new Error("There Is No Token", "authMiddleware");
   }
 });
 
 const adminMiddleware = asyncHandler(async (req, res, next) => {
-  const { email } = req.user;
-  console.log(email)
+  const { email } = req.user;   
   const userAdmin = await User.findOne({ email });
   if (userAdmin.role !== "admin") {
     throw new Error("User Is Not Admin, check adminMiddleware");

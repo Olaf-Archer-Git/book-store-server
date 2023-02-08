@@ -20,7 +20,7 @@ const sendEmail = asyncHandler(async (data, req, res) => {
     html: data.htm, // html body
   });
   
-  console.log(info.messageId);
+  // console.log(info.messageId);
 });
 
 module.exports = sendEmail;

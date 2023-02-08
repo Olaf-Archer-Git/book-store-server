@@ -23,7 +23,6 @@ const createUser = asyncHandler(async (req, res) => {
 //login user
 const loginUserCtrl = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  console.log(email);
 
   const findUser = await User.findOne({ email });
   if (findUser && (await findUser.isPasswordMatched(password))) {
@@ -194,7 +193,6 @@ const updatePassword = asyncHandler(async (req, res) => {
 
 const forgotPasswordToken = asyncHandler(async (req, res) => {
   const { email } = req.body;
-  console.log(email);
 
   const user = await User.findOne({ email });
   if (!user) throw new Error("user was not found with this email");

@@ -7,6 +7,7 @@ const authRouter = require("./routes/authRoute");
 const productRouter = require("./routes/productRoute");
 const blogRouter = require("./routes/blogRoute");
 const categoryRouter = require("./routes/categoryRoute");
+const discountRouter = require("./routes/discountRoute")
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const app = express();
@@ -22,6 +23,7 @@ app.use("/api/user", authRouter);
 app.use("/api/product", productRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/category", categoryRouter);
+app.use("/api/discount", discountRouter)
 
 //we have to pass the middleware after routes
 app.use(notFound);

@@ -26,13 +26,14 @@ router.put(
   "/upload/:id",
   authMiddleware,
   adminMiddleware,
-  uploadPhoto.array("images", 10),
+  uploadPhoto.array("image", 10),
   productImgResize,
   uploadImages
 );
 router.put("/favorite", authMiddleware, addToFavorite);
 router.put("/rating", authMiddleware, totalRating);
 router.put("/:id", authMiddleware, adminMiddleware, productUpdate);
+
 router.delete("/:id", authMiddleware, adminMiddleware, productDelete);
 
 module.exports = router;

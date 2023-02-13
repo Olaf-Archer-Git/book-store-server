@@ -38,13 +38,11 @@ var productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    images: {
-      type: Array,
-    },
+    images: [],
     ratings: [
       {
         star: Number,
-        comment: String, 
+        comment: String,
         postedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
       },
     ],
@@ -53,7 +51,7 @@ var productSchema = new mongoose.Schema(
       default: 0,
     },
   },
-  { timestamps: true } 
+  { timestamps: true }
 );
 
 //Export the model

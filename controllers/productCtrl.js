@@ -194,9 +194,7 @@ const uploadImages = async (req, res) => {
   const { id } = req.params;
   validateMongoose(id);
   try {
-    const uploader = (path) => {
-      cloudinaryUploadIMG(path, "images");
-    };
+    const uploader = (path) => cloudinaryUploadIMG(path, "image");
     const URLs = [];
     const files = req.files;
     for (const file of files) {

@@ -1,5 +1,7 @@
 const Blog = require("../models/blogModel");
+const cloudinaryUploadIMG = require("../utils/cloudinary");
 const validateMongoose = require("../utils/validateMongoDB");
+const fs = require("fs");
 
 const createBlog = async (req, res) => {
   try {
@@ -163,6 +165,38 @@ const blogDislikes = async (req, res) => {
   }
 };
 
+const uploadImages = async (req, res) => {
+  const { id } = req.params;
+
+  validateMongoose(id);
+  try {
+    const uploader = (path) => cloudinaryUploadIMG(path, "images");
+    const URLs = [];
+    const files = req.files;
+
+    for (const file of files) {
+      const { path } = file;
+      const newPath = await uploader(path);
+      URLs.push(newPath);
+      fs.unlinkSync(path);
+    }
+    const findBlog = await Blog.findByIdAndUpdate(
+      id,
+      {
+        images: URLs.map((file) => {
+          return file;
+        }),
+      },
+      {
+        new: true,
+      }
+    );
+    res.json(findBlog);
+  } catch (error) {
+    throw new Error(error, "Upload Images Blog");
+  }
+};
+
 module.exports = {
   createBlog,
   updateBlog,
@@ -171,4 +205,5 @@ module.exports = {
   deleteBlog,
   blogLikes,
   blogDislikes,
+  uploadImages,
 };

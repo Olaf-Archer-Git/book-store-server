@@ -40,7 +40,9 @@ const userSchema = new mongoose.Schema(
       default: [],
     },
 
-    address: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
+    address: {
+      type: String,
+    },
     favorite: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     refreshToken: {
       type: String,

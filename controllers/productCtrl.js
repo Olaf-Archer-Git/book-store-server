@@ -108,6 +108,7 @@ const productDelete = asyncHandler(async (req, res) => {
   }
 });
 
+//favorite product
 const addToFavorite = async (req, res) => {
   const { _id } = req.user;
   const { prodID } = req.body;
@@ -142,6 +143,7 @@ const addToFavorite = async (req, res) => {
   }
 };
 
+//product rating
 const totalRating = async (req, res) => {
   const { _id } = req.user;
   const { star, prodID, comment } = req.body;
@@ -191,6 +193,7 @@ const totalRating = async (req, res) => {
   }
 };
 
+//upload images
 const uploadImages = async (req, res) => {
   const { id } = req.params;
 

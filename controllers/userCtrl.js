@@ -29,14 +29,12 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
     const refreshToken = generateRefreshToken(findUser?.id);
     const updateUser = await User.findByIdAndUpdate(
       findUser?.id,
-      {
-        refreshToken,
-      },
+      { refreshToken },
       { new: true }
     );
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      maxAge: 60 * 60 * 1000,
+      maxAge: 72 * 60 * 60 * 1000,
     });
     res.json({
       id: findUser?.id,
@@ -50,6 +48,38 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
     throw new Error("error - login user ctrl");
   }
 });
+
+//login admin user
+const loginAdminCtrl = async (req, res) => {
+  const { email, password } = req.body;
+  const findAdmin = await User.findOne({ email });
+  if (findAdmin.role !== "admin") {
+    throw new Error("This user is not an admin, loginAdminCtrl");
+  }
+
+  if (findAdmin && (await findAdmin.isPasswordMatched(password))) {
+    const refreshToken = generateRefreshToken(findAdmin?.id);
+    const updateUser = await User.findByIdAndUpdate(
+      findAdmin?.id,
+      { refreshToken },
+      { new: true }
+    );
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      maxAge: 72 * 60 * 60 * 1000,
+    });
+    res.json({
+      id: findAdmin?.id,
+      firstName: findAdmin?.firstName,
+      lastName: findAdmin?.lastName,
+      email: findAdmin?.email,
+      mobile: findAdmin?.mobile,
+      token: generateToken(findAdmin?.id),
+    });
+  } else {
+    throw new Error("error - admin user ctrl");
+  }
+};
 
 //handle refresh token
 const handleRefreshToken = asyncHandler(async (req, res) => {
@@ -108,6 +138,27 @@ const getSingleUser = asyncHandler(async (req, res) => {
     throw new Error(error, "getSingleUser");
   }
 });
+
+//save user address
+const saveUserAddress = async (req, res) => {
+  const { id } = req.user;
+  validateMongoDB(id);
+
+  try {
+    const update = await User.findByIdAndUpdate(
+      id,
+      {
+        address: req?.body?.address,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json(update);
+  } catch (error) {
+    throw new Error(error, "save user address");
+  }
+};
 
 //update user
 const updateUser = asyncHandler(async (req, res) => {
@@ -215,6 +266,7 @@ const forgotPasswordToken = asyncHandler(async (req, res) => {
   }
 });
 
+//redet password
 const resetPassword = async (req, res) => {
   const { password } = req.body;
   const { token } = req.params;
@@ -231,9 +283,21 @@ const resetPassword = async (req, res) => {
   res.json(user);
 };
 
+// get favorite list
+const getFavoriteList = async (req, res) => {
+  const { _id } = req.user;
+  try {
+    const findUser = await User.findById(_id).populate("favorite");
+    res.json(findUser);
+  } catch (error) {
+    throw new Error(error, "Get Favorite");
+  }
+};
+
 module.exports = {
   createUser,
   loginUserCtrl,
+  loginAdminCtrl,
   getAllUsers,
   getSingleUser,
   deleteUser,
@@ -245,4 +309,6 @@ module.exports = {
   updatePassword,
   forgotPasswordToken,
   resetPassword,
+  getFavoriteList,
+  saveUserAddress,
 };

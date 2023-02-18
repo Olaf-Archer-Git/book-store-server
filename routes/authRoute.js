@@ -16,6 +16,7 @@ const {
   loginAdminCtrl,
   getFavoriteList,
   saveUserAddress,
+  userCart
 } = require("../controllers/userCtrl");
 const router = express.Router();
 const {
@@ -28,6 +29,8 @@ router.post("/register", createUser);
 router.post("/forgot-password", forgotPasswordToken);
 router.post("/login", loginUserCtrl);
 router.post("/login-admin", loginAdminCtrl);
+router.post("/cart", userCart); 
+
 
 router.get("/all-users", getAllUsers);
 router.get("/favorite", authMiddleware, getFavoriteList);

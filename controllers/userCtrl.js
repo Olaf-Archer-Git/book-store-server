@@ -1,6 +1,4 @@
 const User = require("../models/userModel");
-const Cart = require("../models/cartModel");
-const Product = require("../models/productModel");
 const asyncHandler = require("express-async-handler");
 const { generateToken } = require("../config/jwToken");
 const validateMongoDB = require("../utils/validateMongoDB");
@@ -244,6 +242,7 @@ const updatePassword = asyncHandler(async (req, res) => {
   }
 });
 
+//forgot password token
 const forgotPasswordToken = asyncHandler(async (req, res) => {
   const { email } = req.body;
 
@@ -268,7 +267,7 @@ const forgotPasswordToken = asyncHandler(async (req, res) => {
   }
 });
 
-//redet password
+//reset password
 const resetPassword = async (req, res) => {
   const { password } = req.body;
   const { token } = req.params;
@@ -296,36 +295,6 @@ const getFavoriteList = async (req, res) => {
   }
 };
 
-//user cart
-const userCart = async (req, res) => {
-  const { _id } = req.user;
-  const { cart } = req.body;
-  validateMongoDB(_id);
-  
-  try {
-    const user = await User.findById(_id); 
-
-    const cartAlreadyExist = await Cart.findOne({ orderBy: user._id });
-    if (cartAlreadyExist) {
-      cartAlreadyExist.remove();
-    }
-    const products = [];
-
-    for (let i = 0; i < cart.length; i++) {
-      let object = {};
-      object.product = cart[i]._id;
-      object.count = cart[i].count;
-      object.color = cart[i].color;
-      let getPrice = await Product.findById(cart[i]._id).select("price").exec();
-      object.price = getPrice.price;
-      products.push(object);
-    }
-    console.log(products)
-  } catch (error) {
-    throw new Error(error, "user cart error");
-  }
-};
-
 module.exports = {
   createUser,
   loginUserCtrl,
@@ -343,5 +312,4 @@ module.exports = {
   resetPassword,
   getFavoriteList,
   saveUserAddress,
-  userCart,
 };

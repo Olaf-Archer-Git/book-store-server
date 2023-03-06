@@ -161,6 +161,20 @@ const getSingleOrder = async (req, res) => {
   }
 };
 
+///////
+const getAllOrders = async (req, res) => {
+  try {
+    const allOrders = await Order.find()
+      .populate("products.product")
+      .populate("orderBy")
+      .exec();
+    res.json(allOrders);
+  } catch (error) {
+    throw new Error(error, "get all orders error");
+  }
+};
+//////
+
 const updateOrderStatus = async (req, res) => {
   const { status } = req.body;
   const { id } = req.params;
@@ -188,4 +202,5 @@ module.exports = {
   createOrder,
   getSingleOrder,
   updateOrderStatus,
+  getAllOrders,
 };

@@ -10,8 +10,9 @@ const productRouter = require("./routes/productRoute");
 const blogRouter = require("./routes/blogRoute");
 const categoryRouter = require("./routes/categoryRoute");
 const discountRouter = require("./routes/discountRoute");
-const orderRoute = require("./routes/orderRoute");
-const queryRoute = require("./routes/queryRoute");
+const orderRouter = require("./routes/orderRoute");
+const queryRouter = require("./routes/queryRoute");
+const uploadRouter = require("./routes/uploadRoute");
 
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
@@ -29,10 +30,11 @@ app.use(cookieParser());
 app.use("/api/user", authRouter);
 app.use("/api/product", productRouter);
 app.use("/api/blog", blogRouter);
-app.use("/api/queries", queryRoute);
+app.use("/api/queries", queryRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/discount", discountRouter);
-app.use("/api/order", orderRoute);
+app.use("/api/order", orderRouter);
+app.use("/api/upload", uploadRouter);
 
 //we have to pass the middleware after routes
 app.use(notFound);

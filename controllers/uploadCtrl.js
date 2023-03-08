@@ -4,7 +4,6 @@ const {
   cloudinaryDeleteImg,
 } = require("../utils/cloudinary");
 const fs = require("fs");
-const asyncHandler = require("express-async-handler");
 
 const uploadImages = async (req, res) => {
   try {
@@ -22,20 +21,20 @@ const uploadImages = async (req, res) => {
     });
     res.json(images);
   } catch (error) {
-    throw new Error(error);
+    throw new Error("upload img error", error);
   }
 };
 
-const deleteImages = asyncHandler(async (req, res) => {
+const deleteImages = async (req, res) => {
   const { id } = req.params;
-  validateMongoose(id);
 
   try {
-    const deleted = cloudinaryDeleteImg(id, "images");
+    const deleteImages = cloudinaryDeleteImg(id, "images");
+
     res.json({ message: "Deleted" });
   } catch (error) {
     throw new Error("delete error img", error);
   }
-});
+};
 
 module.exports = { uploadImages, deleteImages };

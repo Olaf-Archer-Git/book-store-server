@@ -1,5 +1,7 @@
 const notFound = (req, res, next) => {
-  const catchError = new Error(`Not Found: ${req.originalURL}`);
+  const catchError = new Error(
+    `Not Found :${req.originalURL}, Please Check The URL`
+  );
   res.status(404);
   next(catchError);
 };

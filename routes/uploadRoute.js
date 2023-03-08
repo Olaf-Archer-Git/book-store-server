@@ -10,6 +10,8 @@ const {
   productImgResize,
 } = require("../middlewares/uploadImages");
 
+////
+
 router.post(
   "/",
   authMiddleware,
@@ -19,6 +21,6 @@ router.post(
   uploadImages
 );
 
-router.delete("/:id", authMiddleware, adminMiddleware, deleteImages);
+router.delete("/delete-img/:id", authMiddleware, adminMiddleware, deleteImages);
 
 module.exports = router;

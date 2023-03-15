@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {
   createCategory,
-  updateCategory,
+  // updateCategory,
   deleteCategory,
   getCategory,
   getAllCategories,
@@ -13,7 +13,7 @@ const {
 } = require("../middlewares/authMiddleware");
 
 router.post("/", authMiddleware, adminMiddleware, createCategory);
-router.put("/:id", authMiddleware, adminMiddleware, updateCategory);
+// router.put("/:id", authMiddleware, adminMiddleware, updateCategory);
 router.get("/:id", getCategory);
 router.get("/", getAllCategories);
 

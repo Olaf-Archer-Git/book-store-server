@@ -10,18 +10,18 @@ const createCategory = async (req, res) => {
   }
 };
 
-const updateCategory = async (req, res) => {
-  const { id } = req.params;
-  validateMongoose(id);
-  try {
-    const updatedCategory = await Category.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    res.json(updatedCategory);
-  } catch (error) {
-    throw new Error(error, "updateCategory");
-  }
-};
+// const updateCategory = async (req, res) => {
+//   const { id } = req.params;
+//   validateMongoose(id);
+//   try {
+//     const updatedCategory = await Category.findByIdAndUpdate(id, req.body, {
+//       new: true,
+//     });
+//     res.json(updatedCategory);
+//   } catch (error) {
+//     throw new Error(error, "updateCategory");
+//   }
+// };
 
 const getCategory = async (req, res) => {
   const { id } = req.params;
@@ -56,7 +56,7 @@ const deleteCategory = async (req, res) => {
 
 module.exports = {
   createCategory,
-  updateCategory,
+  // updateCategory,
   deleteCategory,
   getCategory,
   getAllCategories,

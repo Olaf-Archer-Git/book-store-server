@@ -50,7 +50,7 @@ const deleteQuery = async (req, res) => {
   validateMongoDB(id);
 
   try {
-    const deleteQuery = await Query.findOneAndDelete(id);
+    const deleteQuery = await Query.findByIdAndDelete(id);
     res.json(deleteQuery);
   } catch (error) {
     throw new Error("delete query", error);

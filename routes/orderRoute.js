@@ -13,11 +13,13 @@ const {
   getSingleOrder,
   updateOrderStatus,
   getAllOrders,
+  getOrderById,
 } = require("../controllers/orderCtrl");
 
 router.post("/cart", authMiddleware, orderCart);
 router.post("/cart/discount", authMiddleware, applyDiscount);
 router.post("/cash-order", authMiddleware, createOrder);
+router.post("/orderById/:id", authMiddleware, adminMiddleware, getAllOrders);
 /////
 router.get("/cart", authMiddleware, adminMiddleware, getOrderCart);
 ///

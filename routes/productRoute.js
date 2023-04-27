@@ -15,10 +15,12 @@ const {
 } = require("../middlewares/authMiddleware");
 
 router.post("/", authMiddleware, adminMiddleware, createProduct);
+
 router.get("/", getAllProducts);
 router.get("/:id", getProduct);
 
 router.put("/favorite", authMiddleware, addToFavorite);
+
 router.put("/rating", authMiddleware, totalRating);
 router.put("/:id", authMiddleware, adminMiddleware, productUpdate);
 

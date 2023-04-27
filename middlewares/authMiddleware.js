@@ -2,7 +2,7 @@ const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
 
-const authMiddleware = asyncHandler(async (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   let token;
   if (req?.headers?.authorization?.startsWith("Bearer")) {
     token = req.headers.authorization.split(" ")[1];
@@ -18,13 +18,12 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
       throw new Error("Please Login Again");
     }
   } else {
-    
     throw new Error("There Is No Token", "authMiddleware");
   }
-});
+};
 
-const adminMiddleware = asyncHandler(async (req, res, next) => {
-  const { email } = req.user;   
+const adminMiddleware = async (req, res, next) => {
+  const { email } = req.user;
   const userAdmin = await User.findOne({ email });
   if (userAdmin.role !== "admin") {
     throw new Error("User Is Not Admin, check adminMiddleware");
@@ -32,6 +31,6 @@ const adminMiddleware = asyncHandler(async (req, res, next) => {
     //pass the request
     next();
   }
-});
+};
 
 module.exports = { authMiddleware, adminMiddleware };

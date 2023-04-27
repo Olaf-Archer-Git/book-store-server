@@ -53,7 +53,7 @@ const getProduct = asyncHandler(async (req, res) => {
 });
 
 //delete product
-const productDelete = asyncHandler(async (req, res) => {
+const productDelete = async (req, res) => {
   const { id } = req.params;
   try {
     const deleteProduct = await Product.findByIdAndDelete(id);
@@ -61,17 +61,16 @@ const productDelete = asyncHandler(async (req, res) => {
   } catch (error) {
     throw new Error(error, "productDelete, productCtrl");
   }
-});
+};
 
 //favorite product
 const addToFavorite = async (req, res) => {
   const { _id } = req.user;
   const { prodID } = req.body;
-  validateMongoose(_id);
 
   try {
     const user = await User.findById(_id);
-    const alreadyAdded = user?.favorite?.find(
+    const alreadyAdded = user.favorite.find(
       (id) => id.toString() === prodID.toString()
     );
     if (alreadyAdded) {

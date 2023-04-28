@@ -5,7 +5,7 @@ const slugify = require("slugify");
 const validateMongoose = require("../utils/validateMongoDB");
 
 //create product
-const createProduct = asyncHandler(async (req, res) => {
+const createProduct = async (req, res) => {
   try {
     if (req.body.title) {
       req.body.slug = slugify(req.body.title);
@@ -15,7 +15,7 @@ const createProduct = asyncHandler(async (req, res) => {
   } catch (error) {
     throw new Error(error, "createProduct, productCtrl");
   }
-});
+};
 
 // update product
 const productUpdate = asyncHandler(async (req, res) => {
@@ -68,11 +68,11 @@ const addToFavorite = async (req, res) => {
   const { _id } = req.user;
   const { prodID } = req.body;
 
+  console.log(req.body);
+
   try {
     const user = await User.findById(_id);
-    const alreadyAdded = user.favorite.find(
-      (id) => id.toString() === prodID.toString()
-    );
+    const alreadyAdded = user?.favorite?.find((id) => id.toString() === prodID);
     if (alreadyAdded) {
       const user = await User.findByIdAndUpdate(
         _id,

@@ -68,8 +68,6 @@ const addToFavorite = async (req, res) => {
   const { _id } = req.user;
   const { prodID } = req.body;
 
-  console.log(req.body);
-
   try {
     const user = await User.findById(_id);
     const alreadyAdded = user?.favorite?.find((id) => id.toString() === prodID);

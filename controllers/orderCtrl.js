@@ -8,35 +8,15 @@ const validateMongoDB = require("../utils/validateMongoDB");
 
 const orderCart = async (req, res) => {
   const { id } = req.user;
-  const { cart } = req.body;
+  const { productID, quantity, price } = req.body;
   validateMongoDB(id);
 
   try {
-    const user = await User.findById(id);
-    const cartAlreadyExist = await Cart.findOne({ orderBy: user.id });
-    if (cartAlreadyExist) {
-      cartAlreadyExist.remove();
-    }
-
-    const products = [];
-    for (let i = 0; i < cart.length; i++) {
-      let object = {};
-      object.product = cart[i].id;
-      object.count = cart[i].count;
-      let getPrice = await Product.findById(cart[i].id).select("price").exec();
-      object.price = getPrice.price;
-      products.push(object);
-    }
-
-    let cartTotal = 0;
-    for (let i = 0; i < products.length; i++) {
-      cartTotal = cartTotal + products[i].price * products[i].count;
-    }
-
     const newCart = await new Cart({
-      products,
-      cartTotal,
-      orderBy: user?.id,
+      userID: id,
+      productID,
+      quantity,
+      price,
     }).save();
 
     res.json(newCart);
@@ -49,9 +29,7 @@ const getOrderCart = async (req, res) => {
   const { id } = req.user;
   validateMongoDB(id);
   try {
-    const cart = await Cart.findOne({ orderBy: id }).populate(
-      "products.product"
-    );
+    const cart = await Cart.find({ userID: id }).populate("productID");
     res.json(cart);
   } catch (error) {
     throw new Error(error, "getOrderCart error");

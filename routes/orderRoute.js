@@ -13,7 +13,6 @@ const {
   getSingleOrder,
   updateOrderStatus,
   getAllOrders,
-  getOrderById,
 } = require("../controllers/orderCtrl");
 
 router.post("/cart", authMiddleware, orderCart);

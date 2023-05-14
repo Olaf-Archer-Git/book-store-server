@@ -36,6 +36,18 @@ const getOrderCart = async (req, res) => {
   }
 };
 
+const removeProductFromCart = async (req, res) => {
+  const { id } = req.user;
+  const { cartItemId } = req.params;
+  validateMongoDB(id);
+  try {
+    const removeProduct = await Cart.deleteOne({ userID: id, _id: cartItemId });
+    res.json(removeProduct);
+  } catch (error) {
+    throw new Error(error, "getOrderCart error");
+  }
+};
+
 const emptyCart = async (req, res) => {
   const { id } = req.user;
   validateMongoDB(id);
@@ -196,4 +208,5 @@ module.exports = {
   updateOrderStatus,
   getAllOrders,
   getOrderById,
+  removeProductFromCart,
 };

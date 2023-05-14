@@ -13,7 +13,10 @@ const {
   getSingleOrder,
   updateOrderStatus,
   getAllOrders,
+  removeProductFromCart,
+  updateProductFromCart,
 } = require("../controllers/orderCtrl");
+const { update } = require("../models/userModel");
 
 router.post("/cart", authMiddleware, orderCart);
 router.post("/cart/discount", authMiddleware, applyDiscount);
@@ -32,6 +35,7 @@ router.put(
   updateOrderStatus
 );
 
+router.delete("/cart/:cartItemId", authMiddleware, removeProductFromCart);
 router.delete("/empty-cart", authMiddleware, emptyCart);
 
 module.exports = router;

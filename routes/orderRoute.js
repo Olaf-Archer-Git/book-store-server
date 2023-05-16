@@ -7,35 +7,37 @@ const {
 const {
   orderCart,
   getOrderCart,
-  emptyCart,
-  applyDiscount,
+  // emptyCart,
+  // applyDiscount,
   createOrder,
-  getSingleOrder,
-  updateOrderStatus,
-  getAllOrders,
+  // getSingleOrder,
+  // updateOrderStatus,
+  // getAllOrders,
   removeProductFromCart,
   updateProductFromCart,
 } = require("../controllers/orderCtrl");
-const { update } = require("../models/userModel");
+// const { update } = require("../models/userModel");
 
 router.post("/cart", authMiddleware, orderCart);
-router.post("/cart/discount", authMiddleware, applyDiscount);
-router.post("/cash-order", authMiddleware, createOrder);
-router.post("/orderById/:id", authMiddleware, adminMiddleware, getAllOrders);
+// router.post("/cart/discount", authMiddleware, applyDiscount);
+
+router.post("/create-order", authMiddleware, createOrder);
+
+// router.post("/orderById/:id", authMiddleware, adminMiddleware, getAllOrders);
 /////
 router.get("/cart", authMiddleware, adminMiddleware, getOrderCart);
 ///
-router.get("/all-orders", authMiddleware, getAllOrders);
-router.get("/single-order", authMiddleware, getSingleOrder);
+// router.get("/all-orders", authMiddleware, getAllOrders);
+// router.get("/single-order", authMiddleware, getSingleOrder);
 
-router.put(
-  "/update-order/:id",
-  authMiddleware,
-  adminMiddleware,
-  updateOrderStatus
-);
+// router.put(
+//   "/update-order/:id",
+//   authMiddleware,
+//   adminMiddleware,
+//   updateOrderStatus
+// );
 
 router.delete("/cart/:cartItemId", authMiddleware, removeProductFromCart);
-router.delete("/empty-cart", authMiddleware, emptyCart);
+// router.delete("/empty-cart", authMiddleware, emptyCart);
 
 module.exports = router;

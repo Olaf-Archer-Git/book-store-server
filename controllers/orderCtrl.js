@@ -90,49 +90,28 @@ const applyDiscount = async (req, res) => {
 };
 
 const createOrder = async (req, res) => {
-  const { id } = req.user;
-  const { cashOrder, discountApplied } = req.body;
-  validateMongoDB(id);
+  const { _id } = req.user;
+  const {
+    shippingInfo,
+    orderItems,
+    totalPrice,
+    totalPriceAfterDiscount,
+    paymentInfo,
+  } = req.body;
 
   try {
-    if (!cashOrder) throw new Error("failed to create cash order");
-    const user = await User.findById(id);
-    const userCart = await Cart.findOne({ orderby: user.id });
-
-    let finalCost = 0;
-    if (discountApplied && userCart.totalAfterDiscount) {
-      finalCost = userCart.totalAfterDiscount;
-    } else {
-      finalCost = userCart.cartTotal;
-    }
-
-    new Order({
-      products: userCart.products,
-      paymentIntent: {
-        id: uuidv4(),
-        method: "cashOrder",
-        cost: finalCost,
-        status: "Cash on Delivery",
-        created: Date.now(),
-        currency: "euro",
-      },
-      orderBy: user.id,
-      orderStatus: "Cash on Delivery",
-    }).save();
-
-    const updateOrder = userCart.products.map((item) => {
-      return {
-        updateOne: {
-          filter: { id: item.product.id },
-          update: { $inc: { quantity: -item.count, sold: +item.count } },
-        },
-      };
+    const order = await Order.create({
+      shippingInfo,
+      orderItems,
+      totalPrice,
+      totalPriceAfterDiscount,
+      paymentInfo,
+      user: _id,
     });
 
-    await Product.bulkWrite(updateOrder, {});
-    res.json({ message: "success" });
+    res.json({ order, success: true });
   } catch (error) {
-    throw new Error("create order error");
+    throw new Error(error, "create order, orderCtrl");
   }
 };
 
